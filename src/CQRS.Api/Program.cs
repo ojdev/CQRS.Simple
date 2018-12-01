@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CQRS.Infrastructure;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace CQRS.Api
 {
@@ -14,7 +8,10 @@ namespace CQRS.Api
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build()
+                .MigrateDbContext<CQRSDomainContext>((context, services) =>
+                {
+                }).Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
