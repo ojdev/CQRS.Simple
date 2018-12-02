@@ -96,15 +96,23 @@ namespace CQRS.Api
         }
         public static IServiceCollection AddEntityFrameworkSqlServer(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddEntityFrameworkSqlServer()
+            services.AddEntityFrameworkSqlite()
+                .AddDbContext<CQRSDomainContext>(options =>
+                {
+                    options.UseSqlite(configuration["Connections:EventBusDb"],
+                            sqliteOptionsAction: sqlOptions =>
+                            {
+                                sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                            });
+                }, ServiceLifetime.Scoped);
+            services.AddEntityFrameworkSqlite()
                 .AddDbContext<CQRSDomainContext>(options =>
                 {
                     options
-                        .UseSqlServer(configuration["ConnectionString"],
-                            sqlServerOptionsAction: sqlOptions =>
+                        .UseSqlite(configuration["Connections:CQRS"],
+                            sqliteOptionsAction: sqlOptions =>
                             {
                                 sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                                sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                             });
                 },
                 ServiceLifetime.Scoped);

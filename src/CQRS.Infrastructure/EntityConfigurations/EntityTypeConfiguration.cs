@@ -12,7 +12,6 @@ namespace CQRS.Infrastructure.EntityConfigurations
         public void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.HasKey(o => o.Id);
-            builder.Property(o => o.Id).ForSqlServerUseSequenceHiLo("seq");
             builder.Ignore(o => o.DomainEvents);
             builder.Property<DateTimeOffset>("CreationTime").HasField("_creationTime").HasDefaultValueSql("GETDATE()").ValueGeneratedOnAdd();
             builder.Property<DateTimeOffset?>("LastUpdateTime").HasField("_lastUpdateTime");
