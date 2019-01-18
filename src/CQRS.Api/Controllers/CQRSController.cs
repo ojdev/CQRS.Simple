@@ -26,8 +26,8 @@ namespace CQRS.Api.Controllers
             bool commandResult = false;
             if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
             {
-                var createCQRS = new IdentifiedCommand<CreateDomainCommand, bool>(command, guid);
-                commandResult = await _mediator.Send(createCQRS);
+                var identified = new IdentifiedCommand<CreateDomainCommand, bool>(command, guid);
+                commandResult = await _mediator.Send(identified);
             }
             return commandResult ? (IActionResult)Ok() : (IActionResult)BadRequest();
         }
