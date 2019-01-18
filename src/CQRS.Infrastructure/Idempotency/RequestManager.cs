@@ -1,4 +1,5 @@
-﻿using CQRS.Domain.Exceptions;
+﻿using CQRS.Api.Infrastructure.IntegrationEventLogContexts;
+using CQRS.Domain.Exceptions;
 using System;
 using System.Threading.Tasks;
 
@@ -6,9 +7,9 @@ namespace CQRS.Infrastructure.Idempotency
 {
     public class RequestManager : IRequestManager
     {
-        private readonly CQRSDomainContext _context;
+        private readonly IntegrationEventLogContext _context;
 
-        public RequestManager(CQRSDomainContext context)
+        public RequestManager(IntegrationEventLogContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

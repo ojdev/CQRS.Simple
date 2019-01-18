@@ -1,7 +1,8 @@
 ﻿using CQRS.Api.Infrastructure.Filters;
-using CQRS.Domain.SeedWork;
+using CQRS.Api.Infrastructure.IntegrationEventLogContexts;
 using CQRS.Infrastructure;
-using CQRS.Infrastructure.Repositories;
+using CQRS.Infrastructure.Idempotency;
+using EFCore.Kit.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,11 @@ namespace CQRS.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger()
+                .UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", "CQRS V1");
+                });
             app.UseMvc();
         }
     }
@@ -96,21 +102,21 @@ namespace CQRS.Api
         }
         public static IServiceCollection AddEntityFrameworkSqlServer(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddEntityFrameworkSqlite()
+            services.AddEntityFrameworkSqlServer()
                 .AddDbContext<CQRSDomainContext>(options =>
                 {
-                    options.UseSqlite(configuration["Connections:EventBusDb"],
-                            sqliteOptionsAction: sqlOptions =>
+                    options.UseSqlServer(configuration["Connections:EventBusDb"],
+                            sqlServerOptionsAction: sqlOptions =>
                             {
                                 sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                             });
                 }, ServiceLifetime.Scoped);
-            services.AddEntityFrameworkSqlite()
-                .AddDbContext<CQRSDomainContext>(options =>
+            services.AddEntityFrameworkSqlServer()
+                .AddDbContext<IntegrationEventLogContext>(options =>
                 {
                     options
-                        .UseSqlite(configuration["Connections:CQRS"],
-                            sqliteOptionsAction: sqlOptions =>
+                        .UseSqlServer(configuration["Connections:CQRS"],
+                            sqlServerOptionsAction: sqlOptions =>
                             {
                                 sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                             });
@@ -122,6 +128,7 @@ namespace CQRS.Api
         public static IServiceCollection AddMediatRConfigure(this IServiceCollection services)
         {
             services.AddMediatR();
+            services.TryAddScoped<IRequestManager, RequestManager>();
             services.AddScoped<ServiceFactory>(p => p.GetService);
             return services;
         }

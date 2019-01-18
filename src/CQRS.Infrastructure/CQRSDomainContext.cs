@@ -1,18 +1,14 @@
 ﻿using EFCore.Kit.SeedWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CQRS.Infrastructure
 {
-    public class CQRSDomainContext : KitDbContext
+    public class CQRSDomainContext : RDbContext
     {
-        private readonly IMediator _mediator;
+        //private readonly IMediator _mediator;
 
-        public CQRSDomainContext(DbContextOptions options, IMediator mediator) : base(options, mediator)
+        public CQRSDomainContext(DbContextOptions<CQRSDomainContext> options, IMediator mediator) : base(options, mediator)
         {
         }
 

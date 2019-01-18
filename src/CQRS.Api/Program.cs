@@ -1,4 +1,5 @@
-﻿using CQRS.Infrastructure;
+﻿using CQRS.Api.Infrastructure.IntegrationEventLogContexts;
+using CQRS.Infrastructure;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
@@ -11,7 +12,9 @@ namespace CQRS.Api
             CreateWebHostBuilder(args).Build()
                 .MigrateDbContext<CQRSDomainContext>((context, services) =>
                 {
-                }).Run();
+                }).MigrateDbContext<IntegrationEventLogContext>((context, services) =>
+               {
+               }).Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

@@ -17,7 +17,8 @@ namespace CQRS.Api.Application.Commands
 
         public Task<bool> Handle(CreateDomainCommand request, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("CreateDomainCommand"); ;
+            return Task.FromResult(true);
         }
     }
 
