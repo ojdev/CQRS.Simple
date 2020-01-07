@@ -19,7 +19,5 @@ jobs:
       run: echo $GITHUB_ACTOR
     - name: INPUT_REPO
       run: echo $INPUT_REPO
-    - name: git tag
-      run:  |
-        git tag 0.0.1
-        git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_ACTOR/CQRS.Simple.git" origin --tags
+    - name: GITHUB_REPOSITORY
+      run: echo ${GITHUB_REPOSITORY}
