@@ -15,6 +15,10 @@ jobs:
       run: echo "$GITHUB_CONTEXT"
     - name: Show GitHub version
       run: git version
+    - name: GITHUB_ACTOR
+      run: echo $GITHUB_ACTOR
+    - name: INPUT_REPO
+      run: echo $INPUT_REPO
     - name: git tag
       run:  |
         git tag 0.0.1
