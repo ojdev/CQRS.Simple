@@ -15,7 +15,7 @@ jobs:
       run: echo "$GITHUB_CONTEXT"
     - name: Show GitHub version
       run: git version
-    - name: Dump event JSON
-      env:
-        EVENT_JSON_FILENAME: ${{ github.event_path }}
-      run: cat "$EVENT_JSON_FILENAME"
+    - name: git tag
+      run:  |
+        git tag 0.0.1
+        git push origin --tags
