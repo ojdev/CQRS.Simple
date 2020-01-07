@@ -8,9 +8,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      run: |
-        echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
-        echo $RELEASE_VERSION
-        echo ${{ steps.vars.outputs.tag }}
+    - uses: actions/checkout@v1      
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+    - name: Show GitHub ref
+      run: echo "$GITHUB_REF"
+    - name: Dump event JSON
+      env:
+        EVENT_JSON_FILENAME: ${{ github.event_path }}
+      run: cat "$EVENT_JSON_FILENAME"
